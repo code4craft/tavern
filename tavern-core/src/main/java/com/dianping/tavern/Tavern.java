@@ -68,11 +68,13 @@ public class Tavern {
             ApplicationConfig config = parser.parse(urlConnection.getInputStream());
             Assert.notNull(config.getName(),"Name of application must not be null!");
             Application application = new Application(config, ResourceUtils.extractJarFileURL(url).toString());
+            tavernApplicationContainer.register(application);
+        }
+		for (Application application : tavernApplicationContainer.getApplicationMap().values()) {
             for (TavernWebPlugin plugin : plugins) {
                 plugin.init(servletContext,application);
             }
-            tavernApplicationContainer.register(application);
-        }
+		}
     }
 
     public void resolve(){

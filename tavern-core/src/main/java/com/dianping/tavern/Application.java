@@ -87,12 +87,7 @@ public class Application {
     @Override
     public String toString() {
         return "Application{" +
-                "applicationContext=" + applicationContext +
-                ", config=" + config +
-                ", parent=" + parent +
-                ", jarFilePath='" + jarFilePath + '\'' +
-                ", name='" + name + '\'' +
-                ", root=" + root +
+                "name='" + name + '\'' +
                 '}';
     }
 }

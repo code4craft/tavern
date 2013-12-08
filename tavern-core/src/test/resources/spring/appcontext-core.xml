@@ -10,6 +10,6 @@
 	
 	<context:annotation-config />
 
-	<bean class="com.dianping.tavern.TestBean"/>
+	<bean name="testBean" class="com.dianping.tavern.TestBean"/>
 
 </beans>

@@ -15,10 +15,13 @@ public class TavernTest {
 
 	@Test
 	public void testInit() throws IOException {
-		tavern.setServletContext(new MockServletContext());
+        MockServletContext servletContext = new MockServletContext();
+        servletContext.addInitParameter("contextConfigLocation","classpath*:spring/appcontext-*.xml");
+        tavern.setServletContext(servletContext);
 		tavern.init();
         Map<String,Application> applicationMap = Tavern.contexts().getApplicationMap();
-        TestBean bean = Tavern.getCurrentApplication(getClass()).getBean(TestBean.class);
+        Application currentApplication = Tavern.getCurrentApplication(getClass());
+        TestBean bean = currentApplication.getBean(TestBean.class);
         System.out.println(applicationMap);
     }
 }

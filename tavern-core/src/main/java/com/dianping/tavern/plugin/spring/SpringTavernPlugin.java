@@ -35,14 +35,14 @@ public class SpringTavernPlugin implements TavernWebPlugin {
 		}
 	}
 
-	private ContextLoader contextLoader;
+	private SpringTavernContextLoader contextLoader;
 
 	/**
 	 * Create the ContextLoader to use. Can be overridden in subclasses.
 	 * 
 	 * @return the new ContextLoader
 	 */
-	protected ContextLoader createContextLoader(Application application) {
+	protected SpringTavernContextLoader createContextLoader(Application application) {
 		return new SpringTavernContextLoader(application);
 	}
 
@@ -51,7 +51,7 @@ public class SpringTavernPlugin implements TavernWebPlugin {
 	 * 
 	 * @return the current ContextLoader
 	 */
-	public ContextLoader getContextLoader() {
+	public SpringTavernContextLoader getContextLoader() {
 		return this.contextLoader;
 	}
 
