@@ -16,15 +16,18 @@ public class Application {
 
 	private ApplicationConfig config;
 
-    private Application parent;
+	private Application parent;
 
-    private String jarFilePath;
+	private String jarFilePath;
 
-    private boolean root;
+	private String name;
 
-	public Application(ApplicationContext applicationContext, ApplicationConfig config) {
-		this.applicationContext = applicationContext;
+	private boolean root = false;
+
+	public Application(ApplicationConfig config, String jarFilePath) {
 		this.config = config;
+		this.name = config.getName();
+		this.jarFilePath = jarFilePath;
 	}
 
 	public ApplicationContext getApplicationContext() {
@@ -53,27 +56,43 @@ public class Application {
 		return (T) BeanFactoryUtils.beanOfType(applicationContext, clazz);
 	}
 
-    public String getJarFilePath() {
-        return jarFilePath;
-    }
+	public String getJarFilePath() {
+		return jarFilePath;
+	}
 
-    public void setJarFilePath(String jarFilePath) {
-        this.jarFilePath = jarFilePath;
-    }
+	public void setJarFilePath(String jarFilePath) {
+		this.jarFilePath = jarFilePath;
+	}
 
-    public boolean isRoot() {
-        return root;
-    }
+	public boolean isRoot() {
+		return root;
+	}
 
-    public void setRoot(boolean root) {
-        this.root = root;
-    }
+	public void setRoot(boolean root) {
+		this.root = root;
+	}
 
-    public Application getParent() {
-        return parent;
-    }
+	public Application getParent() {
+		return parent;
+	}
 
-    public void setParent(Application parent) {
-        this.parent = parent;
+	public void setParent(Application parent) {
+		this.parent = parent;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+    @Override
+    public String toString() {
+        return "Application{" +
+                "applicationContext=" + applicationContext +
+                ", config=" + config +
+                ", parent=" + parent +
+                ", jarFilePath='" + jarFilePath + '\'' +
+                ", name='" + name + '\'' +
+                ", root=" + root +
+                '}';
     }
 }

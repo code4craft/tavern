@@ -10,7 +10,7 @@ import java.util.Enumeration;
 /**
  * @author code4crafter@gmail.com
  */
-public class TavernApplicationContextsTest {
+public class TavernApplicationContainerTest {
 
     @Test
     public void testContext() throws IOException {
