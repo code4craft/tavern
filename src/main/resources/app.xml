@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Application>
-    <name></name>
+    <name>tavern</name>
     <parent></parent>
     <contextPath></contextPath>
     <packageBase>com.dianping.searchweb.hotel</packageBase>

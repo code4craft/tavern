@@ -22,23 +22,17 @@ public class SpringTavernContextLoader extends ContextLoader {
 		this.application = application;
 	}
 
-    protected WebApplicationContext createWebApplicationContext(
-            ServletContext servletContext, ApplicationContext parent) throws BeansException {
+	protected WebApplicationContext createWebApplicationContext(ServletContext servletContext, ApplicationContext parent)
+			throws BeansException {
 
-        Class contextClass = determineContextClass(servletContext);
-        if (!ConfigurableWebApplicationContext.class.isAssignableFrom(contextClass)) {
-            throw new ApplicationContextException("Custom context class [" + contextClass.getName() +
-                    "] is not of type [" + ConfigurableWebApplicationContext.class.getName() + "]");
-        }
-
-        ConfigurableWebApplicationContext wac =
-                (ConfigurableWebApplicationContext) BeanUtils.instantiateClass(contextClass);
-        wac.setParent(parent);
-        wac.setServletContext(servletContext);
-        wac.setConfigLocation(application.getConfig().getContextPath());
-        customizeContext(servletContext, wac);
-        wac.refresh();
-        application.setApplicationContext(wac);
-        return wac;
-    }
+		ConfigurableWebApplicationContext wac = new TavernXmlWebApplicationContext(application);
+		wac.setParent(parent);
+		wac.setServletContext(servletContext);
+		wac.setConfigLocation(application.getConfig().getContextPath() == null ? servletContext
+				.getInitParameter(CONFIG_LOCATION_PARAM) : application.getConfig().getContextPath());
+		customizeContext(servletContext, wac);
+		wac.refresh();
+		application.setApplicationContext(wac);
+		return wac;
+	}
 }

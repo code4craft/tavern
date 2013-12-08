@@ -2,6 +2,7 @@ package com.dianping.tavern.plugin.spring;
 
 import com.dianping.tavern.Application;
 import com.dianping.tavern.plugin.TavernWebPlugin;
+import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.ContextLoaderListener;
 
@@ -19,7 +20,15 @@ public class SpringTavernPlugin implements TavernWebPlugin {
 		this.contextLoader.initWebApplicationContext(servletContext);
 	}
 
-	@Override
+    @Override
+    public void resolved(ServletContext servletContext, Application application) {
+        ConfigurableWebApplicationContext applicationContext = (ConfigurableWebApplicationContext) application.getApplicationContext();
+        if (application.getParent()!=null){
+            applicationContext.setParent(application.getParent().getApplicationContext());
+        }
+    }
+
+    @Override
 	public void destroy(ServletContext servletContext, Application application) {
 		if (this.contextLoader != null) {
 			this.contextLoader.closeWebApplicationContext(servletContext);

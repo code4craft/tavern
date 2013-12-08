@@ -20,3 +20,15 @@
 ## iBatis
 
 提供数据源复用支持。
+
+
+PathMatchingResourcePatternResolver
+
+ResourceUtils.isJar
+
+	Enumeration resourceUrls = getClassLoader().getResources(path);
+	
+URL
+
+URLConnection con = this.url.openConnection();
+		con.setUseCaches(false);
