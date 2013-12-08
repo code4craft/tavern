@@ -1,34 +1,50 @@
 ## Tavern
 ========
-基于Spring的Web项目模块化开发集成组件。
+根据jar包进行Web项目模块化的集成组件。
+
+## 目标：
+
+为常用开源组件提供模块化支持。
 
 ## Spring
 
-为不同jar包提供不同ApplicationContext上下文，并支持双亲委托机制。
-
-扫描app.xml=>根据启动多个加载器
+为不同jar包提供不同ApplicationContext上下文，并支持双亲委托机制。从而使不同jar包的bean不再冲突！
 
 ## Struts
+
+TODO
 
 1. ### 为不同jar包提供名空间冲突检查。
 2. ### 提供单Action内URL路由功能
 
 ## Freemarker
 
+TODO
+
 为freemarker提供自定义ftl路径功能。
 
 ## iBatis
 
+TODO
+
 提供数据源复用支持。
 
+=========
 
-PathMatchingResourcePatternResolver
+## 使用：
 
-ResourceUtils.isJar
+在jar包`src/main/resource`目录配置`app.xml`文件：
 
-	Enumeration resourceUrls = getClassLoader().getResources(path);
+	<?xml version="1.0" encoding="UTF-8"?>
+	<Application>
+	    <name>tavern</name>
+	    <parent></parent>
+	    <contextPath>classpath*:spring/appcontext-*.xml</contextPath>
+	    <packageBase>com.dianping.tavern</packageBase>
+	</Application>
 	
-URL
+在`web.xml`中配置:
 
-URLConnection con = this.url.openConnection();
-		con.setUseCaches(false);
+    <listener>
+        <listener-class>com.dianping.tavern.web.TavernContextLoaderListener</listener-class>
+    </listener>
