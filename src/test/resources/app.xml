@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Application>
+    <name>tavern</name>
+    <parent>_global</parent>
+    <contextPath></contextPath>
+    <packageBase>com.dianping.searchweb.hotel</packageBase>
+</Application>
