@@ -24,7 +24,8 @@
 
     <modules>
         <module>tavern-core</module>
-        <module>tavern-example</module>
+        <module>tavern-example/application</module>
+        <module>tavern-example/web</module>
     </modules>
 
 </project>

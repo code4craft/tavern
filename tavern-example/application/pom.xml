@@ -13,5 +13,13 @@
     <artifactId>tavern-example-application</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.dianping</groupId>
+            <artifactId>tavern-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 
 </project>

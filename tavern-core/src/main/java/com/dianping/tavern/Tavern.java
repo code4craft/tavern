@@ -48,7 +48,6 @@ public class Tavern {
     public void run() throws IOException {
         init();
         resolve();
-        destroy();
     }
 
     public void init() throws IOException {
@@ -91,5 +90,9 @@ public class Tavern {
 
     protected ApplicationConfigParser getParser() {
         return new XmlApplicationConfigParser();
+    }
+
+    public void setServletContext(ServletContext servletContext) {
+        this.servletContext = servletContext;
     }
 }

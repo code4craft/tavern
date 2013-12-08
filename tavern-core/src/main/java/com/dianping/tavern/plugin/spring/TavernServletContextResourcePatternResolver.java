@@ -24,14 +24,12 @@ public class TavernServletContextResourcePatternResolver extends ServletContextR
 
 	private Application application;
 
-	public TavernServletContextResourcePatternResolver(ServletContext servletContext, Application application) {
+	public TavernServletContextResourcePatternResolver(ServletContext servletContext) {
 		super(servletContext);
-		this.application = application;
 	}
 
-	public TavernServletContextResourcePatternResolver(ResourceLoader resourceLoader, Application application) {
+	public TavernServletContextResourcePatternResolver(ResourceLoader resourceLoader) {
 		super(resourceLoader);
-		this.application = application;
 	}
 
 	@Override
@@ -53,4 +51,8 @@ public class TavernServletContextResourcePatternResolver extends ServletContextR
 		}
 		return (Resource[]) resourceList.toArray(new Resource[resourceList.size()]);
 	}
+
+    public void setApplication(Application application) {
+        this.application = application;
+    }
 }

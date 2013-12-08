@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Application>
+    <name>tavern-example-application</name>
+    <contextPath></contextPath>
+    <packageBase>com.dianping.tavern.example.application</packageBase>
+</Application>
