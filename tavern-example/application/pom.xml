@@ -2,29 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <artifactId>dianping-parent</artifactId>
         <groupId>com.dianping</groupId>
         <version>2.0.0</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.dianping</groupId>
-    <artifactId>tavern</artifactId>
+    <artifactId>tavern-example-application</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
 
-    <properties>
-        <struts.version>2.3.15.3</struts.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <powermock.version>1.4.12</powermock.version>
-        <mockito.version>1.9.0</mockito.version>
-    </properties>
-
-    <modules>
-        <module>tavern-core</module>
-        <module>tavern-example</module>
-    </modules>
 
 </project>
