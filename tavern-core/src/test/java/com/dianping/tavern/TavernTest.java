@@ -19,8 +19,9 @@ public class TavernTest {
         servletContext.addInitParameter("contextConfigLocation","classpath*:spring/appcontext-*.xml");
         tavern.setServletContext(servletContext);
 		tavern.init();
+        tavern.resolve();
         Map<String,Application> applicationMap = Tavern.contexts().getApplicationMap();
-        Application currentApplication = Tavern.getCurrentApplication(getClass());
+        Application currentApplication = Tavern.getRoottApplication();
         TestBean bean = currentApplication.getBean(TestBean.class);
         System.out.println(applicationMap);
     }

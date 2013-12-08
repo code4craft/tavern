@@ -306,13 +306,11 @@ public class SpringTavernContextLoader {
 			throws BeansException {
 
 		ConfigurableWebApplicationContext wac = new TavernXmlWebApplicationContext(application);
-		wac.setParent(parent);
 		wac.setServletContext(servletContext);
 		wac.setConfigLocation(application.getConfig().getContextPath() == null ? servletContext
 				.getInitParameter(CONFIG_LOCATION_PARAM) : application.getConfig().getContextPath());
 		customizeContext(servletContext, wac);
 		wac.refresh();
-		application.setApplicationContext(wac);
 		return wac;
 	}
 }

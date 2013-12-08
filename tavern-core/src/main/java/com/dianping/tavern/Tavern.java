@@ -45,6 +45,10 @@ public class Tavern {
         return contexts().getCurrentApplication(clazz);
     }
 
+    public static Application getRoottApplication() {
+        return contexts().getApplicationMap().get(GLOBAL_APPLICATION);
+    }
+
     public void run() throws IOException {
         init();
         resolve();
@@ -81,7 +85,7 @@ public class Tavern {
         tavernApplicationContainer.resolveParents();
         for (Application application : tavernApplicationContainer.getApplicationMap().values()) {
             for (TavernWebPlugin plugin : plugins) {
-                plugin.init(servletContext,application);
+                plugin.resolved(servletContext,application);
             }
         }
     }

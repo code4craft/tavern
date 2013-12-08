@@ -5,6 +5,7 @@ import com.dianping.tavern.plugin.TavernWebPlugin;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -17,8 +18,9 @@ public class SpringTavernPlugin implements TavernWebPlugin {
 	@Override
 	public void init(ServletContext servletContext, Application application) {
 		this.contextLoader = createContextLoader(application);
-		this.contextLoader.initWebApplicationContext(servletContext);
-	}
+        WebApplicationContext webApplicationContext = this.contextLoader.initWebApplicationContext(servletContext);
+        application.setApplicationContext(webApplicationContext);
+    }
 
     @Override
     public void resolved(ServletContext servletContext, Application application) {
