@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import java.io.InputStream;
 
+import static org.junit.Assert.*;
+
 /**
  * @author code4crafter@gmail.com
  */
@@ -16,6 +18,9 @@ public class XmlApplicationConfigParserTest {
     public void testParser(){
         InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("app.xml");
         ApplicationConfig config = xmlApplicationConfigParser.parse(resourceAsStream);
-        Assert.assertEquals("tavern",config.getName());
+        assertEquals("tavern", config.getName());
+        assertEquals("", config.getContextPath());
+        assertEquals("com.dianping.tavern", config.getPackageBase());
+        assertNull(config.getParent());
     }
 }
