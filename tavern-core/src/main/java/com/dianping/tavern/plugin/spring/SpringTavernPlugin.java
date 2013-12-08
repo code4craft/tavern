@@ -27,6 +27,7 @@ public class SpringTavernPlugin implements TavernWebPlugin {
         ConfigurableWebApplicationContext applicationContext = (ConfigurableWebApplicationContext) application.getApplicationContext();
         if (application.getParent()!=null){
             applicationContext.setParent(application.getParent().getApplicationContext());
+            applicationContext.refresh();
         }
     }
 

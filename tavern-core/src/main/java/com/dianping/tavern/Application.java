@@ -53,8 +53,9 @@ public class Application {
 
 	@SuppressWarnings("unchecked")
 	public <T> T getBean(Class<T> clazz) {
-		return (T) BeanFactoryUtils.beanOfType(applicationContext, clazz);
+		return (T) BeanFactoryUtils.beanOfTypeIncludingAncestors(applicationContext, clazz);
 	}
+
 
 	public String getJarFilePath() {
 		return jarFilePath;
