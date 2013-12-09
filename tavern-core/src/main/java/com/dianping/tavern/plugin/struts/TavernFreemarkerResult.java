@@ -14,7 +14,7 @@ public class TavernFreemarkerResult extends FreemarkerResult {
 	@Override
 	protected Configuration getConfiguration() throws TemplateException {
 		Configuration configuration1 = super.getConfiguration();
-		configuration1.setTemplateLoader(new ClassPathTemplateLoader(new PathMatchingResourcePatternResolver(), "classpath*:/ftl/"));
+		configuration1.setTemplateLoader(new ClassPathTemplateLoader(new PathMatchingResourcePatternResolver(), "classpath*:/ftl"));
 		return configuration1;
 	}
 }
