@@ -1,40 +1,44 @@
 package com.dianping.tavern.plugin.spring;
 
 import com.dianping.tavern.Application;
-import com.dianping.tavern.plugin.TavernWebPlugin;
+import com.dianping.tavern.plugin.PluginContext;
+import com.dianping.tavern.plugin.TavernPlugin;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
-import org.springframework.web.context.ContextLoader;
-import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
 
 /**
  * @author code4crafter@gmail.com
  */
-public class SpringTavernPlugin implements TavernWebPlugin {
+public class SpringTavernPlugin implements TavernPlugin {
 
 	@Override
-	public void init(ServletContext servletContext, Application application) {
-		this.contextLoader = createContextLoader(application);
-        WebApplicationContext webApplicationContext = this.contextLoader.initWebApplicationContext(servletContext);
-        application.setApplicationContext(webApplicationContext);
-    }
+	public void init(PluginContext pluginContext) {
+		this.contextLoader = createContextLoader(pluginContext.getApplication());
+		WebApplicationContext webApplicationContext = this.contextLoader.initWebApplicationContext(pluginContext
+				.getServletContext());
+		pluginContext.getApplication().setApplicationContext(webApplicationContext);
+	}
 
-    @Override
-    public void resolved(ServletContext servletContext, Application application) {
-        ConfigurableWebApplicationContext applicationContext = (ConfigurableWebApplicationContext) application.getApplicationContext();
-        if (application.getParent()!=null){
-            applicationContext.setParent(application.getParent().getApplicationContext());
-            applicationContext.refresh();
-        }
-    }
+	@Override
+	public void resolve(PluginContext pluginContext) {
+		ConfigurableWebApplicationContext applicationContext = (ConfigurableWebApplicationContext) pluginContext
+				.getApplication().getApplicationContext();
+		if (pluginContext.getApplication().getParent() != null) {
+			applicationContext.setParent(pluginContext.getApplication().getParent().getApplicationContext());
+			applicationContext.refresh();
+		}
+	}
 
-    @Override
-	public void destroy(ServletContext servletContext, Application application) {
+	@Override
+	public void resolved(PluginContext pluginContext) {
+	}
+
+	@Override
+	public void destroy(PluginContext pluginContext) {
 		if (this.contextLoader != null) {
-			this.contextLoader.closeWebApplicationContext(servletContext);
+			this.contextLoader.closeWebApplicationContext(pluginContext.getServletContext());
 		}
 	}
 
