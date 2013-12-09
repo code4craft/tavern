@@ -39,7 +39,7 @@ public class Tavern {
 
 	static {
         //TODO:目前与struts整合还有些问题，先disable
-//		plugins.add(new SpringTavernPlugin());
+		plugins.add(new SpringTavernPlugin());
 	}
 
     /**
@@ -71,6 +71,16 @@ public class Tavern {
 	public static Application getCurrentApplication(Class<?> clazz) {
 		return contexts().getCurrentApplication(clazz);
 	}
+
+    /**
+     * 获取某个类应该对应的Application<br>
+     * 根据定义的classpath决定
+     * @param clazz
+     * @return
+     */
+    public static Application getCurrentApplication(String clazzName) {
+        return contexts().getCurrentApplication(clazzName);
+    }
 
 	public static Application getRoottApplication() {
 		return contexts().getApplicationMap().get(GLOBAL_APPLICATION);

@@ -27,17 +27,22 @@ public class TavernApplicationContainer {
 
 	private Map<String, Application> applicationMap = new ConcurrentHashMap<String, Application>();
 
-    /**
-     * 根据包路径获取当前Application
-     * @param clazz
-     * @return
-     */
+	/**
+	 * 根据包路径获取当前Application
+	 * 
+	 * @param clazz
+	 * @return
+	 */
 	public Application getCurrentApplication(Class<?> clazz) {
+		return getCurrentApplication(clazz.getCanonicalName());
+	}
+
+	public Application getCurrentApplication(String clazzName) {
 		Iterator<Application> iterator = applicationMap.values().iterator();
 		while (iterator.hasNext()) {
 			Application application = iterator.next();
-			if (application.getConfig() != null
-					&& clazz.getCanonicalName().startsWith(application.getConfig().getPackageBase())) {
+			if (application.getConfig() != null && application.getConfig().getPackageBase() != null
+					&& clazzName.startsWith(application.getConfig().getPackageBase())) {
 				return application;
 			}
 		}
@@ -48,11 +53,11 @@ public class TavernApplicationContainer {
 		applicationMap.put(application.getName(), application);
 	}
 
-    public Map<String, Application> getApplicationMap() {
-        return applicationMap;
-    }
+	public Map<String, Application> getApplicationMap() {
+		return applicationMap;
+	}
 
-    public void resolveParents() {
+	public void resolveParents() {
 		for (Application application : applicationMap.values()) {
 			if (application.isRoot()) {
 				continue;
@@ -63,17 +68,17 @@ public class TavernApplicationContainer {
 			} else {
 				Application parentApp = applicationMap.get(parent);
 				Assert.notNull(parentApp, "Parent " + parent + " of " + application + " is error!");
-                application.setParent(parentApp);
+				application.setParent(parentApp);
 			}
 		}
 		resolveCircleDependency();
 	}
 
-    public Application getApplication(String name){
-        return applicationMap.get(name);
-    }
+	public Application getApplication(String name) {
+		return applicationMap.get(name);
+	}
 
 	private void resolveCircleDependency() {
-        //TODO
+		// TODO
 	}
 }

@@ -136,7 +136,20 @@ public class SpringTavernContextLoader {
             throws IllegalStateException, BeansException {
 
         if (application.isRoot()){
-            return new ContextLoader().initWebApplicationContext(servletContext);
+            return new ContextLoader(){
+                @Override
+                protected WebApplicationContext createWebApplicationContext(ServletContext servletContext, ApplicationContext parent) throws BeansException {
+
+                    ConfigurableWebApplicationContext wac =
+                            new TavernXmlWebApplicationContext(application);
+                    wac.setParent(parent);
+                    wac.setServletContext(servletContext);
+                    wac.setConfigLocation(servletContext.getInitParameter(CONFIG_LOCATION_PARAM));
+                    customizeContext(servletContext, wac);
+                    wac.refresh();
+                    return wac;
+                }
+            }.initWebApplicationContext(servletContext);
         }
 
         servletContext.log("Initializing Spring root WebApplicationContext");

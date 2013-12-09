@@ -4,6 +4,10 @@
 
 <struts>
 
+    <bean type="com.opensymphony.xwork2.ObjectFactory" class="com.dianping.tavern.plugin.struts.TavernSpringObjectFactory" name="tavernObjectFactory" />
+
+    <constant name="struts.objectFactory" value="tavernObjectFactory"></constant>
+
     <package name="tavern-default" extends="struts-default">
         <result-types>
             <result-type name="freemarkerClass" class="com.dianping.tavern.plugin.struts.TavernFreemarkerResult"/>
