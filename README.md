@@ -17,6 +17,10 @@ TODO
 1. ### 为不同jar包提供名空间冲突检查。
 2. ### 提供单Action内URL路由功能
 
+init_TraditionalXmlConfigurations
+XmlConfigurationProvider
+
+
 ## Freemarker
 
 TODO

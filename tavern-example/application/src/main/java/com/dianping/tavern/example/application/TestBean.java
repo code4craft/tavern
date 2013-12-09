@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TestBean {
 
-    public void helloWorld(){
-        System.out.println("HelloWorld!");
+    public String helloWorld(){
+        return "HelloWorldApp!";
     }
 }
