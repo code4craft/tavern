@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * @author yihua.huang@dianping.com
  */
-public class TavernSpringObjectFactory extends SpringObjectFactory {
+public class TavernSpringObjectFactory extends StrutsSpringObjectFactory {
 
     private static final Logger LOG = LoggerFactory.getLogger(StrutsSpringObjectFactory.class);
 
@@ -48,79 +48,7 @@ public class TavernSpringObjectFactory extends SpringObjectFactory {
             @Inject(StrutsConstants.STRUTS_DEVMODE) String devMode,
             @Inject Container container) {
 
-        super();
-        boolean useClassCache = "true".equals(useClassCacheStr);
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Initializing Struts-Spring integration...");
-        }
-
-        Object rootWebApplicationContext =  servletContext.getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
-
-        if(rootWebApplicationContext instanceof RuntimeException){
-            RuntimeException runtimeException = (RuntimeException)rootWebApplicationContext;
-            LOG.fatal(runtimeException.getMessage());
-            return;
-        }
-
-        ApplicationContext appContext = (ApplicationContext) rootWebApplicationContext;
-        if (appContext == null) {
-            // uh oh! looks like the lifecycle listener wasn't installed. Let's inform the user
-            String message = "********** FATAL ERROR STARTING UP STRUTS-SPRING INTEGRATION **********\n" +
-                    "Looks like the Spring listener was not configured for your web app! \n" +
-                    "Nothing will work until WebApplicationContextUtils returns a valid ApplicationContext.\n" +
-                    "You might need to add the following to web.xml: \n" +
-                    "    <listener>\n" +
-                    "        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>\n" +
-                    "    </listener>";
-            LOG.fatal(message);
-            return;
-        }
-
-        String watchList = container.getInstance(String.class, "struts.class.reloading.watchList");
-        String acceptClasses = container.getInstance(String.class, "struts.class.reloading.acceptClasses");
-        String reloadConfig = container.getInstance(String.class, "struts.class.reloading.reloadConfig");
-
-        if ("true".equals(devMode)
-                && StringUtils.isNotBlank(watchList)
-                && appContext instanceof ClassReloadingXMLWebApplicationContext) {
-            //prevent class caching
-            useClassCache = false;
-
-            ClassReloadingXMLWebApplicationContext reloadingContext = (ClassReloadingXMLWebApplicationContext) appContext;
-            reloadingContext.setupReloading(watchList.split(","), acceptClasses, servletContext, "true".equals(reloadConfig));
-            if (LOG.isInfoEnabled()) {
-                LOG.info("Class reloading is enabled. Make sure this is not used on a production environment!", watchList);
-            }
-
-            setClassLoader(reloadingContext.getReloadingClassLoader());
-
-            //we need to reload the context, so our isntance of the factory is picked up
-            reloadingContext.refresh();
-        }
-
-        this.setApplicationContext(appContext);
-
-        int type = AutowireCapableBeanFactory.AUTOWIRE_BY_NAME;   // default
-        if ("name".equals(autoWire)) {
-            type = AutowireCapableBeanFactory.AUTOWIRE_BY_NAME;
-        } else if ("type".equals(autoWire)) {
-            type = AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE;
-        } else if ("auto".equals(autoWire)) {
-            type = AutowireCapableBeanFactory.AUTOWIRE_AUTODETECT;
-        } else if ("constructor".equals(autoWire)) {
-            type = AutowireCapableBeanFactory.AUTOWIRE_CONSTRUCTOR;
-        } else if ("no".equals(autoWire)) {
-            type = AutowireCapableBeanFactory.AUTOWIRE_NO;
-        }
-        this.setAutowireStrategy(type);
-
-        this.setUseClassCache(useClassCache);
-
-        this.setAlwaysRespectAutowireStrategy("true".equalsIgnoreCase(alwaysAutoWire));
-
-        if (LOG.isInfoEnabled()) {
-            LOG.info("... initialized Struts-Spring integration successfully");
-        }
+        super(autoWire,alwaysAutoWire,useClassCacheStr,servletContext,devMode,container);
     }
 
     @Override
