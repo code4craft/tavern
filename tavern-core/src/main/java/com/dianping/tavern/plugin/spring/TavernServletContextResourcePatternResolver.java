@@ -43,7 +43,7 @@ public class TavernServletContextResourcePatternResolver extends ServletContextR
 					resourceList.add(resource);
 				}
 			} else {
-				if (resource.getURL().toString().startsWith(application.getJarFilePath())) {
+				if (resource.getURL().toString().contains(application.getJarFilePath())) {
 					resourceList.add(resource);
 					importedUrls.add(resource.getURL().toString());
 				}

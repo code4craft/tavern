@@ -310,7 +310,7 @@ public class SpringTavernContextLoader {
 		wac.setConfigLocation(application.getConfig().getContextPath() == null ? servletContext
 				.getInitParameter(CONFIG_LOCATION_PARAM) : application.getConfig().getContextPath());
 		customizeContext(servletContext, wac);
-		wac.refresh();
+        wac.refresh();
 		return wac;
 	}
 }

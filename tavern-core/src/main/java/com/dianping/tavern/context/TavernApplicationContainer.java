@@ -64,6 +64,10 @@ public class TavernApplicationContainer {
 		resolveCircleDependency();
 	}
 
+    public Application getApplication(String name){
+        return applicationMap.get(name);
+    }
+
 	private void resolveCircleDependency() {
         //TODO
 	}

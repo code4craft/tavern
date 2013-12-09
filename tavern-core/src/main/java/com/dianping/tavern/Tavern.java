@@ -33,6 +33,8 @@ public class Tavern {
 
 	private TavernApplicationContainer tavernApplicationContainer = TavernApplicationContainer.getInstance();
 
+	private List<Application> applicationList = new ArrayList<Application>();
+
 	private ApplicationConfigParser parser = getParser();
 
 	private ServletContext servletContext;
@@ -60,11 +62,6 @@ public class Tavern {
 
 	private void initApplication() throws IOException {
 		Enumeration<URL> resources = getClass().getClassLoader().getResources("app.xml");
-		ApplicationConfig globalConfig = new ApplicationConfig();
-		globalConfig.setName(GLOBAL_APPLICATION);
-		Application globalApplication = new Application(globalConfig, null);
-		globalApplication.setRoot(true);
-		tavernApplicationContainer.register(globalApplication);
 		while (resources.hasMoreElements()) {
 			URL url = resources.nextElement();
 			URLConnection urlConnection = url.openConnection();
@@ -73,8 +70,15 @@ public class Tavern {
 			Assert.notNull(config.getName(), "Name of application must not be null!");
 			Application application = new Application(config, ResourceUtils.extractJarFileURL(url).toString());
 			tavernApplicationContainer.register(application);
+            applicationList.add(application);
 		}
-		for (Application application : tavernApplicationContainer.getApplicationMap().values()) {
+        ApplicationConfig globalConfig = new ApplicationConfig();
+        globalConfig.setName(GLOBAL_APPLICATION);
+        Application globalApplication = new Application(globalConfig, null);
+        globalApplication.setRoot(true);
+        tavernApplicationContainer.register(globalApplication);
+        applicationList.add(globalApplication);
+		for (Application application : applicationList) {
 			for (TavernPlugin plugin : plugins) {
 				plugin.init(new PluginContext(application, tavernApplicationContainer, servletContext));
 			}
@@ -83,9 +87,14 @@ public class Tavern {
 
 	public void resolve() {
 		tavernApplicationContainer.resolveParents();
-		for (Application application : tavernApplicationContainer.getApplicationMap().values()) {
+		for (Application application : applicationList) {
 			for (TavernPlugin plugin : plugins) {
 				plugin.resolve(new PluginContext(application, tavernApplicationContainer, servletContext));
+			}
+		}
+		for (Application application : applicationList) {
+			for (TavernPlugin plugin : plugins) {
+				plugin.resolved(new PluginContext(application, tavernApplicationContainer, servletContext));
 			}
 		}
 	}
