@@ -19,7 +19,7 @@ public class XmlApplicationConfigParserTest {
         InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("app.xml");
         ApplicationConfig config = xmlApplicationConfigParser.parse(resourceAsStream);
         assertEquals("tavern", config.getName());
-        assertEquals("", config.getContextPath());
+        assertEquals("classpath*:spring/appcontext-*.xml", config.getContextPath());
         assertEquals("com.dianping.tavern", config.getPackageBase());
         assertNull(config.getParent());
     }

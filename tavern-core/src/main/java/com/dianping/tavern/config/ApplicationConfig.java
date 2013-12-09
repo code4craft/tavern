@@ -5,12 +5,25 @@ package com.dianping.tavern.config;
  */
 public class ApplicationConfig {
 
+    /**
+     * 应用名
+     */
     private String name;
 
+    /**
+     * 包名，作为判断当前上线文的依据<br>
+     * 约定不同app不可使用相同的包名
+     */
     private String packageBase;
 
+    /**
+     * 父类，用于属性继承
+     */
     private String parent;
 
+    /**
+     * spring配置路径
+     */
     private String contextPath;
 
     public String getName() {

@@ -37,6 +37,16 @@ public class SpringTavernPlugin implements TavernPlugin {
 
 	@Override
 	public void resolved(PluginContext pluginContext) {
+		injectAutowiredExternal(pluginContext);
+
+	}
+
+	/**
+	 * 注入其他ApplicationContext的bean
+	 * 
+	 * @param pluginContext
+	 */
+	private void injectAutowiredExternal(PluginContext pluginContext) {
 		// 先这样写，反正只注入一次，性能什么的玩儿蛋去吧
 		ConfigurableWebApplicationContext applicationContext = (ConfigurableWebApplicationContext) pluginContext
 				.getApplication().getApplicationContext();
@@ -44,17 +54,17 @@ public class SpringTavernPlugin implements TavernPlugin {
 			Object bean = applicationContext.getBean(beanName);
 			for (Field field : bean.getClass().getDeclaredFields()) {
 				if (field.isAnnotationPresent(AutowiredExternal.class)) {
-                    field.setAccessible(true);
+					field.setAccessible(true);
 					AutowiredExternal annotation = field.getAnnotation(AutowiredExternal.class);
 					Application application = pluginContext.getTavernApplicationContainer().getApplication(
 							annotation.value());
 					Assert.notNull(application, "Application " + annotation.value() + " does not exist!");
-                    try {
-                        field.set(bean, application.getBean(field.getType()));
-                    } catch (IllegalAccessException e) {
+					try {
+						field.set(bean, application.getBean(field.getType()));
+					} catch (IllegalAccessException e) {
 						e.printStackTrace();
-                    }
-                }
+					}
+				}
 			}
 		}
 	}

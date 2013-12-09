@@ -8,9 +8,5 @@
         <result-types>
             <result-type name="freemarkerClass" class="com.dianping.tavern.plugin.struts.TavernFreemarkerResult"/>
         </result-types>
-        <interceptors>
-            <interceptor name="autowiring"
-                         class="com.opensymphony.xwork2.spring.interceptor.ActionAutowiringInterceptor"/>
-        </interceptors>
     </package>
 </struts>

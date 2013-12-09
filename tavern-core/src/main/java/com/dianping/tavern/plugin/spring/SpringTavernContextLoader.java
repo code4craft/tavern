@@ -25,6 +25,7 @@ import java.util.Properties;
 
 /**
  * @author code4crafter@gmail.com
+ * Vender from {@link org.springframework.web.context.ContextLoader}
  */
 public class SpringTavernContextLoader {
 

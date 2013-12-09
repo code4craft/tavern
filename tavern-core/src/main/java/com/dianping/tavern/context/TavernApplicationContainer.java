@@ -27,6 +27,11 @@ public class TavernApplicationContainer {
 
 	private Map<String, Application> applicationMap = new ConcurrentHashMap<String, Application>();
 
+    /**
+     * 根据包路径获取当前Application
+     * @param clazz
+     * @return
+     */
 	public Application getCurrentApplication(Class<?> clazz) {
 		Iterator<Application> iterator = applicationMap.values().iterator();
 		while (iterator.hasNext()) {

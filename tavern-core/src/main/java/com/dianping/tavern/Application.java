@@ -5,6 +5,7 @@ import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.context.ApplicationContext;
 
 /**
+ * 应用。一个应用对应一个jar包。
  * @author code4crafter@gmail.com
  */
 public class Application {

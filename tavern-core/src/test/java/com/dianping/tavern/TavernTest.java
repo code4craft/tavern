@@ -1,5 +1,6 @@
 package com.dianping.tavern;
 
+import com.dianping.tavern.plugin.spring.SpringTavernPlugin;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.mock.web.MockServletContext;
@@ -19,6 +20,7 @@ public class TavernTest {
 	@Test
 	public void testInit() throws IOException {
         MockServletContext servletContext = new MockServletContext();
+        tavern.addPlugin(new SpringTavernPlugin());
         servletContext.addInitParameter("contextConfigLocation","classpath*:spring/appcontext-*.xml");
         tavern.setServletContext(servletContext);
 		tavern.init();
