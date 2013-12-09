@@ -31,7 +31,7 @@
 	<!-- end by danson.liu -->
 
 	<include file="config/struts/struts-*.xml" />
-	<package name="default" namespace="app" extends="struts-default">
+	<package name="app" extends="tavern-default">
         <action name="helloWorld" class="com.dianping.tavern.example.application.HelloWorldAction">
             <result type="freemarker" name="success">hello.ftl</result>
         </action>
