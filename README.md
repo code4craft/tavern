@@ -33,6 +33,7 @@ TODO
 
 在jar包`src/main/resource`目录配置`app.xml`文件：
 
+```xml
 	<?xml version="1.0" encoding="UTF-8"?>
 	<Application>
 	    <name>tavern</name>
@@ -40,6 +41,7 @@ TODO
 	    <contextPath>classpath*:spring/appcontext-*.xml</contextPath>
 	    <packageBase>com.dianping.tavern</packageBase>
 	</Application>
+```
 	
 ftl请放在`src/main/resources/ftl/`目录下。
 	
