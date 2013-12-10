@@ -38,8 +38,7 @@ public class Tavern {
     private static Set<Class<?>> pluginClazzSet = new HashSet<Class<?>>();
 
 	static {
-        //TODO:目前与struts整合还有些问题，先disable
-		plugins.add(new SpringTavernPlugin());
+        addPlugin(new SpringTavernPlugin());
 	}
 
     /**
@@ -105,8 +104,9 @@ public class Tavern {
         tavernApplicationContainer.register(globalApplication);
         applicationList.add(globalApplication);
         for (Application application : applicationList) {
+            PluginContext pluginContext = new PluginContext(application, tavernApplicationContainer, servletContext);
             for (TavernPlugin plugin : plugins) {
-                plugin.init(new PluginContext(application, tavernApplicationContainer, servletContext));
+                plugin.init(pluginContext);
             }
         }
     }
@@ -121,11 +121,6 @@ public class Tavern {
 		for (Application application : applicationList) {
 			for (TavernPlugin plugin : plugins) {
 				plugin.resolve(new PluginContext(application, tavernApplicationContainer, servletContext));
-			}
-		}
-		for (Application application : applicationList) {
-			for (TavernPlugin plugin : plugins) {
-				plugin.resolved(new PluginContext(application, tavernApplicationContainer, servletContext));
 			}
 		}
 	}

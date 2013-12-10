@@ -1,6 +1,7 @@
 package com.dianping.tavern.plugin.spring;
 
 import com.dianping.tavern.Application;
+import com.dianping.tavern.plugin.PluginContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
@@ -30,18 +31,15 @@ import java.util.Properties;
  */
 public class SpringTavernContextLoader {
 
-	private Application application;
+	private PluginContext pluginContext;
 
-	public SpringTavernContextLoader(Application application) {
-		this.application = application;
+    private Application application;
+
+	public SpringTavernContextLoader(PluginContext pluginContext) {
+		this.pluginContext = pluginContext;
+        this.application = pluginContext.getApplication();
 	}
 
-
-    /**
-     * Config param for the root WebApplicationContext implementation class to
-     * use: "<code>contextClass</code>"
-     */
-    public static final String CONTEXT_CLASS_PARAM = "contextClass";
 
     /**
      * Name of servlet context parameter (i.e., "<code>contextConfigLocation</code>")
@@ -143,7 +141,7 @@ public class SpringTavernContextLoader {
                 protected WebApplicationContext createWebApplicationContext(ServletContext servletContext, ApplicationContext parent) throws BeansException {
 
                     ConfigurableWebApplicationContext wac =
-                            new TavernXmlWebApplicationContext(application);
+                            new TavernXmlWebApplicationContext(pluginContext);
                     wac.setParent(parent);
                     wac.setServletContext(servletContext);
                     wac.setConfigLocation(servletContext.getInitParameter(CONFIG_LOCATION_PARAM));
@@ -188,39 +186,6 @@ public class SpringTavernContextLoader {
             logger.error("Context initialization failed", err);
             servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, err);
             throw err;
-        }
-    }
-
-
-    /**
-     * Return the WebApplicationContext implementation class to use, either the
-     * default XmlWebApplicationContext or a custom context class if specified.
-     * @param servletContext current servlet context
-     * @return the WebApplicationContext implementation class to use
-     * @throws ApplicationContextException if the context class couldn't be loaded
-     * @see #CONTEXT_CLASS_PARAM
-     * @see org.springframework.web.context.support.XmlWebApplicationContext
-     */
-    protected Class determineContextClass(ServletContext servletContext) throws ApplicationContextException {
-        String contextClassName = servletContext.getInitParameter(CONTEXT_CLASS_PARAM);
-        if (contextClassName != null) {
-            try {
-                return ClassUtils.forName(contextClassName);
-            }
-            catch (ClassNotFoundException ex) {
-                throw new ApplicationContextException(
-                        "Failed to load custom context class [" + contextClassName + "]", ex);
-            }
-        }
-        else {
-            contextClassName = defaultStrategies.getProperty(WebApplicationContext.class.getName());
-            try {
-                return ClassUtils.forName(contextClassName, ContextLoader.class.getClassLoader());
-            }
-            catch (ClassNotFoundException ex) {
-                throw new ApplicationContextException(
-                        "Failed to load default context class [" + contextClassName + "]", ex);
-            }
         }
     }
 
@@ -305,29 +270,15 @@ public class SpringTavernContextLoader {
         }
     }
 
-
-    /**
-     * Obtain the Spring root web application context for the current thread
-     * (i.e. for the current thread's context ClassLoader, which needs to be
-     * the web application's ClassLoader).
-     * @return the current root web application context, or <code>null</code>
-     * if none found
-     * @see org.springframework.web.context.support.SpringBeanAutowiringSupport
-     */
-    public static WebApplicationContext getCurrentWebApplicationContext() {
-        return (WebApplicationContext) currentContextPerThread.get(Thread.currentThread().getContextClassLoader());
-    }
-
 	protected WebApplicationContext createWebApplicationContext(ServletContext servletContext, ApplicationContext parent)
 			throws BeansException {
 
-		ConfigurableWebApplicationContext wac = new TavernXmlWebApplicationContext(application);
+		ConfigurableWebApplicationContext wac = new TavernXmlWebApplicationContext(pluginContext);
         try {
             wac.setServletContext(servletContext);
             wac.setConfigLocation(application.getConfig().getContextPath() == null ? servletContext
                     .getInitParameter(CONFIG_LOCATION_PARAM) : application.getConfig().getContextPath());
             customizeContext(servletContext, wac);
-            wac.refresh();
         } catch (Exception e){
             logger.error("init fail "+application,e);
         }

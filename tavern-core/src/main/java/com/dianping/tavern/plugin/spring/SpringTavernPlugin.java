@@ -23,7 +23,7 @@ public class SpringTavernPlugin implements TavernPlugin {
 
 	@Override
 	public void init(PluginContext pluginContext) {
-		this.contextLoader = createContextLoader(pluginContext.getApplication());
+		this.contextLoader = createContextLoader(pluginContext);
 		WebApplicationContext webApplicationContext = this.contextLoader.initWebApplicationContext(pluginContext
 				.getServletContext());
 		pluginContext.getApplication().setApplicationContext(webApplicationContext);
@@ -99,8 +99,8 @@ public class SpringTavernPlugin implements TavernPlugin {
 	 * 
 	 * @return the new ContextLoader
 	 */
-	protected SpringTavernContextLoader createContextLoader(Application application) {
-		return new SpringTavernContextLoader(application);
+	protected SpringTavernContextLoader createContextLoader(PluginContext pluginContext) {
+		return new SpringTavernContextLoader(pluginContext);
 	}
 
 	/**

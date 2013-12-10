@@ -2,6 +2,7 @@ package com.dianping.tavern.plugin.spring;
 
 import com.dianping.tavern.Application;
 import com.dianping.tavern.Tavern;
+import com.dianping.tavern.plugin.PluginContext;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
@@ -10,13 +11,13 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
  */
 public class TavernXmlWebApplicationContext extends XmlWebApplicationContext {
 
-	private Application application;
+	private PluginContext pluginContext;
 
 	private TavernServletContextResourcePatternResolver tavernServletContextResourcePatternResolver;
 
-	public TavernXmlWebApplicationContext(Application application) {
-		this.application = application;
-		tavernServletContextResourcePatternResolver.setApplication(application);
+	public TavernXmlWebApplicationContext(PluginContext pluginContext) {
+		this.pluginContext = pluginContext;
+		tavernServletContextResourcePatternResolver.setPluginContext(pluginContext);
 	}
 
 	@Override

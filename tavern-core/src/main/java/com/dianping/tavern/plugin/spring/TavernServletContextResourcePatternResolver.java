@@ -1,6 +1,7 @@
 package com.dianping.tavern.plugin.spring;
 
 import com.dianping.tavern.Application;
+import com.dianping.tavern.plugin.PluginContext;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.context.support.ServletContextResourcePatternResolver;
@@ -17,12 +18,7 @@ import java.util.Set;
  */
 public class TavernServletContextResourcePatternResolver extends ServletContextResourcePatternResolver {
 
-    /**
-     *
-     */
-	private static Set<String> importedUrls = new HashSet<String>();
-
-	private Application application;
+	private PluginContext pluginContext;
 
 	public TavernServletContextResourcePatternResolver(ServletContext servletContext) {
 		super(servletContext);
@@ -37,22 +33,31 @@ public class TavernServletContextResourcePatternResolver extends ServletContextR
 		Resource[] resources = super.getResources(locationPattern);
 		List<Resource> resourceList = new ArrayList<Resource>(resources.length);
 		for (Resource resource : resources) {
-            //All resource without application definition is considered as root application.
-			if (application.isRoot()) {
-				if (!importedUrls.contains(resource.getURL().toString())) {
+			// All resource without application definition is considered as root
+			// application.
+			if (pluginContext.getApplication().isRoot()) {
+				boolean inAppJarFile = false;
+				for (Application application : pluginContext.getTavernApplicationContainer().getApplicationMap()
+						.values()) {
+					if (application.getJarFilePath() != null
+							&& resource.getURL().toString().contains(application.getJarFilePath())) {
+						inAppJarFile = true;
+						break;
+					}
+				}
+				if (!inAppJarFile) {
 					resourceList.add(resource);
 				}
 			} else {
-				if (resource.getURL().toString().contains(application.getJarFilePath())) {
+				if (resource.getURL().toString().contains(pluginContext.getApplication().getJarFilePath())) {
 					resourceList.add(resource);
-					importedUrls.add(resource.getURL().toString());
 				}
 			}
 		}
 		return (Resource[]) resourceList.toArray(new Resource[resourceList.size()]);
 	}
 
-    public void setApplication(Application application) {
-        this.application = application;
-    }
+	public void setPluginContext(PluginContext pluginContext) {
+		this.pluginContext = pluginContext;
+	}
 }
