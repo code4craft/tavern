@@ -55,30 +55,37 @@ public class SpringTavernPlugin implements TavernPlugin {
 		ConfigurableWebApplicationContext applicationContext = (ConfigurableWebApplicationContext) pluginContext
 				.getApplication().getApplicationContext();
 		for (String beanName : applicationContext.getBeanDefinitionNames()) {
-			try {
-				Object bean = applicationContext.getBean(beanName);
-				for (Field field : bean.getClass().getDeclaredFields()) {
-					if (field.isAnnotationPresent(AutowiredExternal.class)) {
-						field.setAccessible(true);
-						AutowiredExternal annotation = field.getAnnotation(AutowiredExternal.class);
-						Application application = pluginContext.getTavernApplicationContainer().getApplication(
-								annotation.value());
-						Assert.notNull(application, "Application " + annotation.value() + " does not exist!");
-						try {
-							field.set(bean, application.getBean(field.getType()));
-						} catch (IllegalAccessException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			} catch (Exception e) {
-				logger.warn("Unable to load bean " + beanName + " for application "
-						+ pluginContext.getApplication().getName(), e);
-			}
-		}
-	}
+            autoWiredBean(pluginContext, applicationContext, beanName);
+        }
+        for (String beanName : applicationContext.getBeanFactory().getBeanDefinitionNames()) {
+            autoWiredBean(pluginContext, applicationContext, beanName);
+        }
+    }
 
-	@Override
+    private void autoWiredBean(PluginContext pluginContext, ConfigurableWebApplicationContext applicationContext, String beanName) {
+        try {
+            Object bean = applicationContext.getBean(beanName);
+            for (Field field : bean.getClass().getDeclaredFields()) {
+                if (field.isAnnotationPresent(AutowiredExternal.class)) {
+                    field.setAccessible(true);
+                    AutowiredExternal annotation = field.getAnnotation(AutowiredExternal.class);
+                    Application application = pluginContext.getTavernApplicationContainer().getApplication(
+                            annotation.value());
+                    Assert.notNull(application, "Application " + annotation.value() + " does not exist!");
+                    try {
+                        field.set(bean, application.getBean(field.getType()));
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.warn("Unable to load bean " + beanName + " for application "
+                    + pluginContext.getApplication().getName(), e);
+        }
+    }
+
+    @Override
 	public void destroy(PluginContext pluginContext) {
 		if (this.contextLoader != null) {
 			this.contextLoader.closeWebApplicationContext(pluginContext.getServletContext());

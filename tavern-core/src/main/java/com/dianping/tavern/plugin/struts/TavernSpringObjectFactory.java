@@ -43,6 +43,7 @@ public class TavernSpringObjectFactory extends StrutsSpringObjectFactory {
             @Inject Container container) {
 
         super(autoWire,alwaysAutoWire,useClassCacheStr,servletContext,devMode,container);
+        useClassCache = "true".equals(useClassCacheStr);
     }
 
     @Override
