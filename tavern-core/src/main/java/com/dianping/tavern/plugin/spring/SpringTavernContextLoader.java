@@ -3,6 +3,7 @@ package com.dianping.tavern.plugin.spring;
 import com.dianping.tavern.Application;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.access.BeanFactoryLocator;
@@ -34,6 +35,7 @@ public class SpringTavernContextLoader {
 	public SpringTavernContextLoader(Application application) {
 		this.application = application;
 	}
+
 
     /**
      * Config param for the root WebApplicationContext implementation class to
@@ -320,11 +322,15 @@ public class SpringTavernContextLoader {
 			throws BeansException {
 
 		ConfigurableWebApplicationContext wac = new TavernXmlWebApplicationContext(application);
-		wac.setServletContext(servletContext);
-		wac.setConfigLocation(application.getConfig().getContextPath() == null ? servletContext
-				.getInitParameter(CONFIG_LOCATION_PARAM) : application.getConfig().getContextPath());
-		customizeContext(servletContext, wac);
-        wac.refresh();
+        try {
+            wac.setServletContext(servletContext);
+            wac.setConfigLocation(application.getConfig().getContextPath() == null ? servletContext
+                    .getInitParameter(CONFIG_LOCATION_PARAM) : application.getConfig().getContextPath());
+            customizeContext(servletContext, wac);
+            wac.refresh();
+        } catch (Exception e){
+            logger.error("init fail "+application,e);
+        }
 		return wac;
 	}
 }

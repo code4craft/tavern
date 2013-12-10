@@ -29,6 +29,10 @@ import java.util.Map;
  */
 public class TavernSpringObjectFactory extends StrutsSpringObjectFactory {
 
+    private boolean useClassCache;
+
+    private Map<String,Object> classes = new HashMap<String, Object>();
+
     @Inject
     public TavernSpringObjectFactory(
             @Inject(value=StrutsConstants.STRUTS_OBJECTFACTORY_SPRING_AUTOWIRE,required=false) String autoWire,
@@ -71,5 +75,33 @@ public class TavernSpringObjectFactory extends StrutsSpringObjectFactory {
 
 		return bean;
 	}
+
+    public Class getClassInstance(String className) throws ClassNotFoundException {
+        Class clazz = null;
+        if (useClassCache) {
+            synchronized(classes) {
+                // this cache of classes is needed because Spring sucks at dealing with situations where the
+                // class instance changes
+                clazz = (Class) classes.get(className);
+            }
+        }
+
+        if (clazz == null) {
+            ApplicationContext applicationContext = Tavern.getCurrentApplication(className).getApplicationContext();
+            if (applicationContext.containsBean(className)) {
+                clazz = applicationContext.getBean(className).getClass();
+            } else {
+                clazz = super.getClassInstance(className);
+            }
+
+            if (useClassCache) {
+                synchronized(classes) {
+                    classes.put(className, clazz);
+                }
+            }
+        }
+
+        return clazz;
+    }
 
 }
